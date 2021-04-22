@@ -4,24 +4,27 @@ from random import randint
 RED   = "\033[1;31m"  
 RESET = "\033[0;0m" #default value
 
-def gerador_de_paridade_par(data):
-    num_de_1 =  data.count('1')
-    bit_de_paridade = '0'
-    if (num_de_1 % 2) != 0:
-        bit_de_paridade = '1'
-    
-    data = data + bit_de_paridade
-    return data
-    
+
+def parity_even(data):
+    mensagem = data
+    bit_paridade = int(mensagem[0])
+    for i in range(1, len(mensagem)):
+        bit_paridade = bit_paridade ^ int(mensagem[i])
+
+    return mensagem + str(bit_paridade)
         
-def gerador_de_paridade_impar(data):
-    num_de_1 =  data.count('1')
-    bit_de_paridade = '1'
-    if (num_de_1 % 2) != 0:
-        bit_de_paridade = '0'
-    
-    data = data + bit_de_paridade
-    return data
+def parity_odd(data):
+    mensagem = data
+    bit_paridade = int(mensagem[0])
+    for i in range(1, len(mensagem)):
+        bit_paridade = bit_paridade ^ int(mensagem[i])
+
+    if (bit_paridade == 0):
+        bit_paridade = 1
+    else:
+        bit_paridade = 0
+
+    return mensagem + (bit_paridade)
 
 '''
 Função que vai detectar se houve o erro na mensagem transmitida
@@ -59,17 +62,17 @@ def altera_mensagem(dado_enviado):
         count += 1
     return dado_alterado
 
-func = gerador_de_paridade_impar
+func = parity_even
 
 paridade = input("Digite a paridade do seu sistema(pp - paridade par/ pi - paridade impar): ")
 
 
 if(paridade.lower() == "pp"):
     print("\n" + "A paridade do seu sistema é: Paridade Par")
-    func = gerador_de_paridade_par
+    func = parity_even
 else:
     print("\n" + "A paridade do seu sistema é: Paridade Ímpar")
-    func = gerador_de_paridade_impar
+    func = parity_odd
 
 dado = input("Digite a mensagem a ser transmitida: ")
 
